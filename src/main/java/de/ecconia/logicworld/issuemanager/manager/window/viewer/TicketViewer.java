@@ -1,0 +1,168 @@
+package de.ecconia.logicworld.issuemanager.manager.window.viewer;
+
+import de.ecconia.logicworld.issuemanager.data.Type;
+import de.ecconia.logicworld.issuemanager.manager.data.WrappedComment;
+import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CDropDown;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
+import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
+
+public class TicketViewer
+{
+	public TicketViewer(WrappedTicket ticket, Refreshable refreshable)
+	{
+		JFrame window = new JFrame("Ticket: " + ticket.getOriginal().getNumber() + ": " + ticket.getOriginal().getTitle());
+		window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		window.setMinimumSize(new Dimension(300, 200));
+		window.setPreferredSize(new Dimension(500, 500));
+		
+		JPanel content = new JPanel();
+		JScrollPane scroller = new JScrollPane(content);
+		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scroller.getVerticalScrollBar().setUnitIncrement(10);
+		scroller.setBorder(new EmptyBorder(0, 0, 0, 0));
+		window.add(scroller);
+		
+		final JPanel commentSection;
+		
+		{
+			content.setLayout(new RowsWidthFillLayout(scroller.getViewport()));
+			content.setBackground(Color.gray);
+			
+			//Author:
+			{
+				content.add(new JLabel("Author:"));
+				content.add(new CTextArea(" " + ticket.getOriginal().getAuthor().getName(), false));
+			}
+			
+			//Type:
+			{
+				content.add(new JLabel("Type:"));
+				CDropDown<Type> dropdown = new CDropDown<>(Type.values());
+				dropdown.setSelectedItem(ticket.getType());
+				dropdown.addActionListener(e -> {
+					ticket.overwriteType((Type) dropdown.getSelectedItem());
+					refreshable.refreshContent();
+				});
+				content.add(dropdown);
+			}
+			
+			//Title:
+			{
+				content.add(new JLabel("Title:"));
+				CTextArea field = new CTextArea(ticket.getTitle(), true);
+				content.add(field);
+			}
+			
+			//TODO: Ticket maintainer comment?
+			
+			//Body:
+			{
+				content.add(new JLabel("Body:"));
+				CTextArea area = new CTextArea(ticket.getBody(), true);
+				content.add(area);
+			}
+			
+			//Comments:
+			{
+				content.add(new JLabel("Comments:"));
+				commentSection = new JPanel();
+				commentSection.setBackground(Color.darkGray);
+				commentSection.setLayout(new RowsWidthFillLayout(scroller.getViewport()));//new BoxLayout(commentSection, BoxLayout.Y_AXIS));
+				content.add(commentSection);
+				commentSection.add(new JLabel("- Loading (coming soon) -"));
+			}
+		}
+		
+		window.addComponentListener(new ComponentAdapter()
+		{
+			@Override
+			public void componentResized(ComponentEvent e)
+			{
+				content.invalidate();
+				content.revalidate();
+				content.repaint();
+			}
+		});
+		
+		//Make the window close on ESCAPE:
+		KeyEventDispatcher ked = e -> {
+			if(e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			{
+				if(window.isActive())
+				{
+					window.dispose();
+				}
+				return true;
+			}
+			return false;
+		};
+		window.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosed(WindowEvent e)
+			{
+				KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(ked);
+			}
+		});
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(ked);
+		
+		//Make the window visible:
+		window.pack();
+		//TODO: Set location relative to parent instead!
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
+		
+		//Load the comments (async):
+		Thread commentLoader = new Thread(() -> {
+			try
+			{
+				ticket.loadComments();
+			}
+			catch(Exception e)
+			{
+				commentSection.removeAll();
+				commentSection.add(new JLabel("Was not able to load comments, see console."));
+				System.out.println("Was not able to load comments:");
+				e.printStackTrace(System.out);
+				return;
+			}
+			//Loading done, now adding:
+			List<WrappedComment> comments = ticket.getComments();
+			commentSection.removeAll();
+			if(comments.isEmpty())
+			{
+				JLabel label = new JLabel("   No comments.   ");
+				label.setForeground(Color.white);
+				commentSection.add(label);
+			}
+			else
+			{
+				for(WrappedComment comment : comments)
+				{
+					commentSection.add(new CommentComponent(comment, commentSection));
+				}
+			}
+			commentSection.invalidate();
+			commentSection.revalidate();
+			commentSection.repaint();
+		}, "CommentLoader");
+		commentLoader.start();
+	}
+}
