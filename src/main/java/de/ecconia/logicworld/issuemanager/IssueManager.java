@@ -14,11 +14,15 @@ import java.util.List;
 
 public class IssueManager
 {
+	public static final Path rootFolder = Paths.get("LWIssueManager");
+	public static final Path dataFile = rootFolder.resolve("data.json");
+	public static final Path issueFolder = rootFolder.resolve("issues");
+	
 	public static void main(String[] args) throws IOException
 	{
 		//Download issues, if not already done:
-		Path issueFolder = Paths.get("data", "issues", "game");
-		if(!Files.exists(issueFolder))
+		Path gameIssueFolder = IssueManager.issueFolder.resolve("game");
+		if(!Files.exists(gameIssueFolder))
 		{
 			System.out.println("Original issues are not downloaded yet! Downloading...");
 			IssueDownloader.downloadGameIssues();
@@ -26,7 +30,7 @@ public class IssueManager
 		}
 		//Load the issues from file:
 		List<Ticket> tickets = new ArrayList<>();
-		Files.list(issueFolder).forEach(path -> {
+		Files.list(gameIssueFolder).forEach(path -> {
 			try
 			{
 				if(Files.isDirectory(path))

@@ -4,6 +4,7 @@ import de.ecconia.java.json.JSONArray;
 import de.ecconia.java.json.JSONNode;
 import de.ecconia.java.json.JSONObject;
 import de.ecconia.java.json.JSONParser;
+import de.ecconia.logicworld.issuemanager.IssueManager;
 import de.ecconia.logicworld.issuemanager.data.Comment;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,7 +20,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class IssueDownloader
 {
-	private static final Path rootPath = Paths.get("data");
 	private static final String gameType = "game";
 	
 	public static final String LogicWorldWebAPI = "https://logicworld.net/graphql";
@@ -27,7 +27,7 @@ public class IssueDownloader
 	//TODO: Actually move to own class, because this should not generate the data objects.
 	public static List<Comment> loadCommentsFor(String id)
 	{
-		Path folderLocation = rootPath.resolve("issues").resolve(gameType).resolve("comments");
+		Path folderLocation = IssueManager.issueFolder.resolve(gameType).resolve("comments");
 		Path fileLocation = folderLocation.resolve("c-" + id + ".json");
 		JSONObject data;
 		if(Files.exists(fileLocation))
@@ -113,7 +113,7 @@ public class IssueDownloader
 	
 	public static void downloadGameIssues()
 	{
-		Path path = rootPath.resolve("issues").resolve(gameType);
+		Path path = IssueManager.issueFolder.resolve(gameType);
 		try
 		{
 			Files.createDirectories(path);

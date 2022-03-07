@@ -3,6 +3,7 @@ package de.ecconia.logicworld.issuemanager.manager;
 import de.ecconia.java.json.JSONArray;
 import de.ecconia.java.json.JSONObject;
 import de.ecconia.java.json.JSONParser;
+import de.ecconia.logicworld.issuemanager.IssueManager;
 import de.ecconia.logicworld.issuemanager.data.Ticket;
 import de.ecconia.logicworld.issuemanager.data.Type;
 import de.ecconia.logicworld.issuemanager.manager.data.Category;
@@ -96,7 +97,7 @@ public class Manager
 		String jsonString = rootJSON.printJSON();
 		try
 		{
-			Files.writeString(Paths.get("data", "data.json"), jsonString);
+			Files.writeString(IssueManager.dataFile, jsonString);
 		}
 		catch(IOException e)
 		{
@@ -111,7 +112,7 @@ public class Manager
 		String dataFile;
 		try
 		{
-			dataFile = Files.readString(Paths.get("data", "data.json"));
+			dataFile = Files.readString(IssueManager.dataFile);
 		}
 		catch(IOException e)
 		{
