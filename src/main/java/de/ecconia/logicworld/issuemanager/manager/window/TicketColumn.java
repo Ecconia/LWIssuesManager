@@ -30,6 +30,7 @@ public class TicketColumn extends JPanel
 	private final TicketList list;
 	private final LightScrollPane scroller;
 	private final int width = 150;
+	private final CTextArea title; //To update the count.
 	
 	public TicketColumn(ColumnContainer groupComponent, Category category)
 	{
@@ -40,7 +41,7 @@ public class TicketColumn extends JPanel
 		
 		JPanel topBar = new JPanel(new BorderLayout());
 		{
-			CTextArea title = new CTextArea(category.getName() + " (" + category.getTickets().size() + ")", false);
+			title = new CTextArea(category.getName() + " (" + category.getTickets().size() + ")", false);
 			title.setFont(title.getFont().deriveFont(Font.BOLD)); //Make bold, for the good thickness.
 			title.setBorder(new EmptyBorder(4, 6, 4, 6)); //Adjust to be the same nice outline as buttons have.
 			topBar.add(title);
@@ -73,24 +74,21 @@ public class TicketColumn extends JPanel
 			@Override
 			public void componentResized(ComponentEvent e)
 			{
-				updateRandomly();
+				list.invalidate();
+				list.revalidate();
+				list.repaint();
 			}
 		});
+	}
+	
+	protected void updateCount()
+	{
+		title.setText(category.getName() + " (" + category.getTickets().size() + ")");
 	}
 	
 	public Category getCategory()
 	{
 		return category;
-	}
-	
-	private void updateRandomly()
-	{
-		list.invalidate();
-		list.revalidate();
-		list.repaint();
-		scroller.invalidate();
-		scroller.revalidate();
-		scroller.repaint();
 	}
 	
 	public void addTickets(Collection<WrappedTicket> tickets, boolean update)
@@ -106,10 +104,6 @@ public class TicketColumn extends JPanel
 			list.revalidate();
 			list.repaint();
 		}
-	}
-	
-	public void refresh()
-	{
 	}
 	
 	private class TicketList extends JPanel implements Dropable
@@ -210,22 +204,27 @@ public class TicketColumn extends JPanel
 				{
 					index--;
 				}
+				//Move in data:
+				category.moveTicket(oldIndex, index);
+				//Move in GUI:
 				remove(oldIndex);
 				add(ticket, index);
-				category.moveTicket(oldIndex, index);
 			}
 			else
 			{
+				//Move in data:
+				category.add(ticket.getTicket(), index);
+				//Move in GUI:
 				TicketColumn oldColumn = ticket.getCurrentColumn();
 				oldColumn.remove(ticket);
+				oldColumn.updateCount();
 				oldColumn.invalidate();
 				oldColumn.revalidate();
 				oldColumn.repaint();
 				add(ticket, index);
 				ticket.setCurrentColumn(TicketColumn.this);
-				category.add(ticket.getTicket(), index);
 			}
-			
+			updateCount();
 			invalidate();
 			revalidate();
 			repaint();
