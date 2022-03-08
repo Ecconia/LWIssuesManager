@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 public class TicketViewer
 {
@@ -57,9 +58,10 @@ public class TicketViewer
 				CDropDown<Type> dropdown = new CDropDown<>(Type.values());
 				dropdown.setSelectedItem(ticket.getType());
 				dropdown.addActionListener(e -> {
-					ticket.overwriteType((Type) dropdown.getSelectedItem());
+					ticket.overwriteType(dropdown.getSelectedItem());
 					refreshable.refreshContent();
 				});
+				dropdown.setBorder(new LineBorder(Color.darkGray, 3));
 				content.add(dropdown);
 			}
 			

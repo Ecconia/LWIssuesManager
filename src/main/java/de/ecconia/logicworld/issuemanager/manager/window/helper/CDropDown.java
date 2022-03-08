@@ -1,58 +1,262 @@
 package de.ecconia.logicworld.issuemanager.manager.window.helper;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.border.LineBorder;
 
-public class CDropDown<T> extends JComboBox<T>
+public class CDropDown<T> extends JPanel
 {
-	public CDropDown(T[] items)
+	private final List<ActionListener> actionListeners = new LinkedList<>();
+	
+	private final T[] elements;
+	private final JLabel currentElementCell;
+	JPopupMenu popup;
+	
+	private int activeIndex = -1;
+	
+	public CDropDown(T[] elements)
 	{
-		super(items);
+		super(new BorderLayout());
 		
-		setUI(new BasicComboBoxUI()
+		this.elements = elements;
+		if(elements.length != 0)
+		{
+			activeIndex = 0;
+		}
+		
+		popup = new JPopupMenu("DropdownPopup");
+		
+		currentElementCell = new JLabel(elements.length == 0 ? " - Empty - " : elements[activeIndex].toString());
+		currentElementCell.setOpaque(true);
+		currentElementCell.setBackground(Color.darkGray);
+		currentElementCell.setForeground(Color.white);
+		add(currentElementCell);
+		
+		//Indicator element:
+		add(new JComponent()
 		{
 			@Override
-			public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus)
+			public Dimension getPreferredSize()
 			{
-				//Nothing to do here.
+				int side = getHeight();
+				return new Dimension(side, side);
 			}
-		});
-		setRenderer(new DefaultListCellRenderer()
-		{
+			
 			@Override
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+			public void paint(Graphics g)
 			{
-				Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				if(c instanceof JLabel label)
+				g.setColor(Color.darkGray);
+				g.fillRect(0, 0, getWidth(), getHeight());
+				g.setColor(Color.white);
+				
+				int width = getSize().width;
+				int height = getSize().height;
+				//Clamp the size of the image to roughly 2px to a third of width/height (whichever is smaller).
+				int size = Math.max((Math.min(height, width) - 4) / 3, 2);
+				int x = (width - size) / 2;
+				int y = (height - size) / 2;
+				g.translate(x, y);
+				if(elements.length == 0)
 				{
-					label.setText(" " + label.getText());
-					
-					//We do not want to highlight the selection focus:
-					list.setSelectionForeground(Color.white);
-					list.setSelectionBackground(Color.darkGray);
-					
-					label.setForeground(Color.white);
-					label.setBackground(Color.darkGray);
-					if(isSelected)
-					{
-						label.setBackground(Color.darkGray.brighter());
-					}
-					setBorder(new EmptyBorder(0, 0, 0, 0));
-					return label;
+					//X:
+					g.drawLine(0, 0, size, size);
+					g.drawLine(0, size, size, 0);
 				}
-				return c;
+				else
+				{
+					//Triangle:
+					int mid = (size / 2) - 1;
+					for(int column = size - 1, line = 0; column >= 0; column--)
+					{
+						g.drawLine(mid - column, line, mid + column, line);
+						line++;
+					}
+				}
+					g.translate(-x, -y);
 			}
-		});
-		setBorder(new EmptyBorder(0, 0, 0, 0));
-		setBackground(Color.darkGray);
-		setForeground(Color.white);
+		}, BorderLayout.EAST);
+		
+		popup.setBackground(Color.darkGray);
+		popup.setBorder(new LineBorder(Color.black, 1));
+		popup.setLayout(new GridLayout(0, 1));
+		for(T t : elements)
+		{
+			popup.add(new EntryLabel(t));
+		}
+		
+		setupEventListeners();
+	}
+	
+	private void setupEventListeners()
+	{
+		MouseAdapter mouseHook = new MouseAdapter()
+		{
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				//onClick and not onRelease, since the popup closes itself onPress already. -> It would open again.
+				if(!popup.isVisible())
+				{
+					spawnPopup();
+				}
+			}
+		};
+		addMouseListener(mouseHook);
+		currentElementCell.addMouseListener(mouseHook);
+	}
+	
+	private void spawnPopup()
+	{
+		if(!popup.isVisible())
+		{
+			Insets insets = getInsets();
+			Dimension size = popup.getMinimumSize();
+			popup.setPreferredSize(new Dimension(Math.max(size.width, getWidth() - insets.left - insets.right), size.height));
+			popup.invalidate();
+			popup.revalidate();
+			popup.show(this, insets.left, getHeight() - insets.bottom);
+			popup.requestFocus();
+		}
+	}
+	
+	private void killPopup()
+	{
+		if(popup.isVisible())
+		{
+			popup.setVisible(false);
+		}
+	}
+	
+	public T getSelectedItem()
+	{
+		return elements[activeIndex];
+	}
+	
+	private class EntryLabel extends JLabel
+	{
+		private boolean mouseOver;
+		private final T element;
+		
+		public EntryLabel(T element)
+		{
+			super(element.toString());
+			this.element = element;
+			
+			setOpaque(true);
+			setForeground(Color.white);
+			setBorder(new EmptyBorder(0, 4, 0, 4));
+			
+			addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mouseReleased(MouseEvent e)
+				{
+					//Activate stuffs.
+					setSelectedItem(element);
+					notifyActionListeners();
+					killPopup(); //Done here.
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e)
+				{
+					mouseOver = true;
+					setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+					repaint();
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e)
+				{
+					mouseOver = false;
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					repaint();
+				}
+			});
+		}
+		
+		@Override
+		public void paint(Graphics g)
+		{
+			//Update here, whenever drawn...
+			if(mouseOver)
+			{
+				setBackground(new Color(0, 150, 0));
+			}
+			else if(element == elements[activeIndex])
+			{
+				setBackground(new Color(0, 100, 0));
+			}
+			else
+			{
+				setBackground(Color.darkGray);
+			}
+			super.paint(g);
+		}
+	}
+	
+	public void setSelectedItem(T element)
+	{
+		if(element == elements[activeIndex])
+		{
+			return; //Nothing to do.
+		}
+		for(int i = 0; i < elements.length; i++)
+		{
+			if(elements[i] == element)
+			{
+				activeIndex = i;
+				currentElementCell.setText(elements[i].toString());
+				currentElementCell.repaint();
+				return;
+			}
+		}
+		throw new RuntimeException("Provided argument not element of the data-array.");
+	}
+	
+	private void notifyActionListeners()
+	{
+		for(ActionListener listener : actionListeners)
+		{
+			listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
+		}
+	}
+	
+	public void addActionListener(ActionListener listener)
+	{
+		actionListeners.add(listener);
+	}
+	
+	public void removeActionListener(ActionListener listener)
+	{
+		actionListeners.remove(listener);
 	}
 }
