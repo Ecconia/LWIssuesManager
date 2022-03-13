@@ -13,7 +13,6 @@ import de.ecconia.logicworld.issuemanager.manager.window.ManagerGUI;
 import de.ecconia.logicworld.issuemanager.util.OrderedMap;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +22,8 @@ public class Manager
 {
 	private final Map<Integer, WrappedTicket> ticketMap = new HashMap<>();
 	private final OrderedMap<String, CategoryGroup> groups = new OrderedMap<>();
+	
+	private FilterManager filterManager = new FilterManager(this);
 	
 	public Manager(List<Ticket> originalTickets)
 	{
@@ -221,5 +222,10 @@ public class Manager
 	public Collection<WrappedTicket> getTickets()
 	{
 		return ticketMap.values();
+	}
+	
+	public FilterManager getFilterManager()
+	{
+		return filterManager;
 	}
 }

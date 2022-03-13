@@ -51,4 +51,9 @@ public class Category
 		WrappedTicket ticket = tickets.remove(oldIndex);
 		tickets.add(index, ticket);
 	}
+	
+	public boolean contains(WrappedTicket ticket)
+	{
+		return tickets.contains(ticket);
+	}
 }

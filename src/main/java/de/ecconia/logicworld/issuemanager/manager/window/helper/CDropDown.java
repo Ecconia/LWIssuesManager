@@ -49,48 +49,8 @@ public class CDropDown<T> extends JPanel
 		add(currentElementCell);
 		
 		//Indicator element:
-		add(new JComponent()
-		{
-			@Override
-			public Dimension getPreferredSize()
-			{
-				int side = getHeight();
-				return new Dimension(side, side);
-			}
-			
-			@Override
-			public void paint(Graphics g)
-			{
-				g.setColor(Color.darkGray);
-				g.fillRect(0, 0, getWidth(), getHeight());
-				g.setColor(Color.white);
-				
-				int width = getSize().width;
-				int height = getSize().height;
-				//Clamp the size of the image to roughly 2px to a third of width/height (whichever is smaller).
-				int size = Math.max((Math.min(height, width) - 4) / 3, 2);
-				int x = (width - size) / 2;
-				int y = (height - size) / 2;
-				g.translate(x, y);
-				if(elements.length == 0)
-				{
-					//X:
-					g.drawLine(0, 0, size, size);
-					g.drawLine(0, size, size, 0);
-				}
-				else
-				{
-					//Triangle:
-					int mid = (size / 2) - 1;
-					for(int column = size - 1, line = 0; column >= 0; column--)
-					{
-						g.drawLine(mid - column, line, mid + column, line);
-						line++;
-					}
-				}
-					g.translate(-x, -y);
-			}
-		}, BorderLayout.EAST);
+		//TODO: Update empty state.
+		add(new DropDownArrowComponent(elements.length == 0), BorderLayout.EAST);
 		
 		popup.setBackground(Color.darkGray);
 		popup.setBorder(new LineBorder(Color.black, 1));
@@ -101,6 +61,67 @@ public class CDropDown<T> extends JPanel
 		}
 		
 		setupEventListeners();
+	}
+	
+	public static class DropDownArrowComponent extends JComponent
+	{
+		private boolean isEmpty;
+		
+		public DropDownArrowComponent(boolean isEmpty)
+		{
+			this.isEmpty = isEmpty;
+		}
+		
+		public void setEmpty(boolean isEmpty)
+		{
+			this.isEmpty = isEmpty;
+		}
+		
+		@Override
+		public Dimension getPreferredSize()
+		{
+			int side = getHeight();
+			return new Dimension(side, side);
+		}
+		
+		@Override
+		public Dimension getMinimumSize()
+		{
+			return getPreferredSize();
+		}
+		
+		@Override
+		public void paint(Graphics g)
+		{
+			g.setColor(Color.darkGray);
+			g.fillRect(0, 0, getWidth(), getHeight());
+			g.setColor(Color.white);
+			
+			int width = getSize().width;
+			int height = getSize().height;
+			//Clamp the size of the image to roughly 2px to a third of width/height (whichever is smaller).
+			int size = Math.max((Math.min(height, width) - 4) / 3, 2);
+			int x = (width - size) / 2;
+			int y = (height - size) / 2;
+			g.translate(x, y);
+			if(isEmpty)
+			{
+				//X:
+				g.drawLine(0, 0, size, size);
+				g.drawLine(0, size, size, 0);
+			}
+			else
+			{
+				//Triangle:
+				int mid = (size / 2);
+				for(int column = size - 1, line = 0; column >= 0; column--)
+				{
+					g.drawLine(mid - column, line, mid + column, line);
+					line++;
+				}
+			}
+			g.translate(-x, -y);
+		}
 	}
 	
 	private void setupEventListeners()

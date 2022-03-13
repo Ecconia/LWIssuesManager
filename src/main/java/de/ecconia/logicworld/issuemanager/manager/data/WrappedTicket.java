@@ -3,18 +3,18 @@ package de.ecconia.logicworld.issuemanager.manager.data;
 import de.ecconia.logicworld.issuemanager.data.Comment;
 import de.ecconia.logicworld.issuemanager.data.Ticket;
 import de.ecconia.logicworld.issuemanager.data.Type;
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JComponent;
 
 public class WrappedTicket
 {
 	private final Ticket original;
 	
 	//Dirty, but efficient way of distributing this reused component in the window system:
-	private Component component;
+	private JComponent component;
 	
 	private Type customType;
 	private String customTitle;
@@ -52,12 +52,12 @@ public class WrappedTicket
 		return original.getType();
 	}
 	
-	public void setComponent(Component component)
+	public void setComponent(JComponent component)
 	{
 		this.component = component;
 	}
 	
-	public Component getComponent()
+	public JComponent getComponent()
 	{
 		return component;
 	}

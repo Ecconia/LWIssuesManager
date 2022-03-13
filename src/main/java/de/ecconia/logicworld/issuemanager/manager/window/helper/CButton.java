@@ -8,6 +8,9 @@ import javax.swing.border.EmptyBorder;
 
 public class CButton extends JButton
 {
+	private boolean active;
+	private boolean hover;
+	
 	public CButton(String name)
 	{
 		super(name);
@@ -21,13 +24,34 @@ public class CButton extends JButton
 		{
 			public void mouseEntered(MouseEvent evt)
 			{
-				setBackground(Color.darkGray.brighter());
+				hover = true;
+				updateBackground();
 			}
 			
 			public void mouseExited(MouseEvent evt)
 			{
-				setBackground(Color.darkGray);
+				hover = false;
+				updateBackground();
 			}
 		});
+	}
+	
+	public void setActive(boolean active)
+	{
+		this.active = active;
+		updateBackground();
+	}
+	
+	private void updateBackground()
+	{
+		if(active)
+		{
+			setBackground(hover ? getForeground().darker() : getForeground().darker().darker());
+		}
+		else
+		{
+			setBackground(hover ? Color.darkGray.brighter() : Color.darkGray);
+		}
+		repaint();
 	}
 }

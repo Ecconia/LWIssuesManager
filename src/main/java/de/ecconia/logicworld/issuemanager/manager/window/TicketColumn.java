@@ -30,7 +30,7 @@ public class TicketColumn extends JPanel
 	private final TicketList list;
 	private final LightScrollPane scroller;
 	private final int width = 150;
-	private final CTextArea title; //To update the count.
+	private final CTextArea title; //To update the count. //TBI: Should filtered tickets be counted? I do not think so.
 	
 	public TicketColumn(ColumnContainer groupComponent, Category category)
 	{
@@ -95,8 +95,9 @@ public class TicketColumn extends JPanel
 	{
 		for(WrappedTicket ticket : tickets)
 		{
+			TicketBox ticketComponent = (TicketBox) ticket.getComponent();
 			list.add(ticket.getComponent());
-			((TicketBox) ticket.getComponent()).setCurrentColumn(this);
+			ticketComponent.setCurrentColumn(this);
 		}
 		if(update)
 		{
@@ -122,12 +123,19 @@ public class TicketColumn extends JPanel
 			int index = getIndexAt(position);
 			if(index == 0)
 			{
+				//It is the first item, so the drop Y value is 0.
 				highlight = -5;
+			}
+			else if(index == getComponentCount())
+			{
+				//We are appending to the list, so take the last entry and its height as Y value.
+				Component comp = getComponent(index - 1);
+				highlight = comp.getY() + comp.getHeight() - 5;
 			}
 			else
 			{
-				Component comp = getComponent(index - 1);
-				highlight = comp.getY() + comp.getHeight() - 5;
+				//We are somewhere in the middle. So just take the entry which place gonna be used as drop position.
+				highlight = getComponent(index).getY() - 5;
 			}
 			repaint();
 		}
@@ -149,33 +157,63 @@ public class TicketColumn extends JPanel
 			{
 				return 0;
 			}
-			int index = 0;
+			int index = 0; //The index to be returned.
 			Component onComponent = null;
 			if(getComponentCount() == 1)
 			{
 				onComponent = getComponent(0);
+				if(!onComponent.isVisible())
+				{
+					//Only one component, and this component is invisible, add last:
+					return 1;
+				}
 			}
 			else
 			{
-				Component lastChild = getComponent(0);
+				Component firstChild = getComponent(0);
+				Component lastVisibleChild = firstChild.isVisible() ? firstChild : null; //Remember the last visible child.
+				int lastVisibleIndex = 0;
 				for(int i = 1; i < getComponentCount(); i++)
 				{
 					Component nextChild = getComponent(i);
 					if(position.y < nextChild.getY())
 					{
-						onComponent = lastChild;
-						index = i - 1;
+						if(lastVisibleChild == null)
+						{
+							//We have not yet encountered a single visible ticket, yet managed to drop before the first visible one, this means we add to first position.
+							return 0;
+						}
+						onComponent = lastVisibleChild;
+						index = lastVisibleIndex;
 						break;
 					}
-					index++;
-					lastChild = nextChild;
+					if(nextChild.isVisible())
+					{
+						lastVisibleChild = nextChild;
+						lastVisibleIndex = i;
+					}
 				}
 				if(onComponent == null)
 				{
-					onComponent = lastChild;
+					if(lastVisibleChild == null)
+					{
+						//Not a single ticket in this list is visible, append last (since we dropped behind them all):
+						return getComponentCount();
+					}
+					//We went over all components but had not been before any component. Now we can be on the last or behind the last, check:
+					if(position.y > lastVisibleChild.getY() + lastVisibleChild.getHeight())
+					{
+						//We are behind the last component, append!
+						return getComponentCount();
+					}
+					else
+					{
+						//We are on the last child:
+						onComponent = lastVisibleChild;
+						index = lastVisibleIndex;
+					}
 				}
 			}
-			// ((TicketBox) onComponent).setSelected(true);
 			int halfHeight = onComponent.getHeight() / 2;
 			int pos = position.y - onComponent.getY();
 			return pos > halfHeight ? index + 1 : index;
@@ -262,6 +300,10 @@ public class TicketColumn extends JPanel
 				int totalHeight = 0;
 				for(Component child : parent.getComponents())
 				{
+					if(!child.isVisible())
+					{
+						continue; //Ignore the ones which can't be seen anyway.
+					}
 					Dimension minimum = child.getMinimumSize();
 					totalHeight += minimum.height;
 				}
@@ -274,6 +316,10 @@ public class TicketColumn extends JPanel
 				int totalHeight = 0;
 				for(Component child : parent.getComponents())
 				{
+					if(!child.isVisible())
+					{
+						continue; //Ignore the ones which can't be seen anyway.
+					}
 					Dimension minimum = child.getMinimumSize();
 					totalHeight += minimum.height;
 				}
@@ -283,17 +329,14 @@ public class TicketColumn extends JPanel
 			@Override
 			public void layoutContainer(Container parent)
 			{
-				// System.out.println();
-				// System.out.println("Parent is: " + parent.getClass().getSimpleName() + " " + parent.getSize().width);
-				// System.out.println("Parent is: " + parent.getParent().getClass().getSimpleName() + " " + parent.getParent().getSize().width);
-				// System.out.println("Parent is: " + parent.getParent().getParent().getClass().getSimpleName() + " " + parent.getParent().getSize().width);
-				// System.out.println("Parent is: " + parent.getParent().getParent().getParent().getClass().getSimpleName() + " " + parent.getParent().getParent().getSize().width);
-				// System.out.println("Parent is: " + parent.getParent().getParent().getParent().getParent().getClass().getSimpleName() + " " + parent.getParent().getParent().getParent().getSize().width);
-				// System.out.println("Parent is: " + parent.getParent().getParent().getParent().getParent().getParent().getClass().getSimpleName() + " " + parent.getParent().getParent().getParent().getParent().getSize().width);
-				
 				int y = 0;
 				for(Component child : parent.getComponents())
 				{
+					if(!child.isVisible())
+					{
+						child.setBounds(0, y, 0, 0); //Make super small, but preserve the position. So that the drop code can figure out the index.
+						continue;
+					}
 					Dimension min = child.getPreferredSize();
 					child.setBounds(0, y, parent.getParent().getSize().width, min.height);
 					y += min.height;

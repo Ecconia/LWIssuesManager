@@ -4,6 +4,7 @@ import de.ecconia.logicworld.issuemanager.manager.Manager;
 import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
 import de.ecconia.logicworld.issuemanager.manager.window.dnd.DragPane;
+import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,7 +42,7 @@ public class ManagerGUI
 		{
 			ticket.setComponent(new TicketBox(ticket));
 		}
-
+		
 		//Setup window:
 		JFrame window = new JFrame("LogicWorld Ticket-Manager");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,8 +57,16 @@ public class ManagerGUI
 		contentPane.setBackground(Color.darkGray);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout());
-		groupBar = new GroupBar(manager, this);
-		contentPane.add(groupBar, BorderLayout.NORTH);
+		{
+			JPanel topBars = new JPanel(new RowsWidthFillLayout(window));
+			contentPane.add(topBars, BorderLayout.NORTH);
+			
+			//TODO: Also register this as field, in case that something gets deleted - or better register a listener to the manager.
+			topBars.add(new FilterBar(manager, this));
+			
+			groupBar = new GroupBar(manager, this);
+			topBars.add(groupBar);
+		}
 		JScrollPane scroller = new JScrollPane(contentPane);
 		scroller.getHorizontalScrollBar().setUnitIncrement(10);
 		scroller.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -90,6 +99,15 @@ public class ManagerGUI
 			}, AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 		}
 		window.getContentPane().add(scroller);
+		
+		//Listeners:
+		{
+			manager.getFilterManager().addFilterAppliedListener(() -> {
+				contentPane.invalidate();
+				contentPane.revalidate();
+				contentPane.repaint();
+			});
+		}
 		
 		//Make visible:
 		window.pack();
