@@ -20,6 +20,9 @@ public class WrappedTicket
 	private String customTitle;
 	private String customBody;
 	
+	//Custom stuff:
+	private String shortComment;
+	
 	private String ticketMaintainerComment;
 	
 	private List<WrappedComment> comments;
@@ -50,6 +53,21 @@ public class WrappedTicket
 			return customType;
 		}
 		return original.getType();
+	}
+	
+	public String getShortComment()
+	{
+		return shortComment == null ? "" : shortComment;
+	}
+	
+	public void setShortComment(String shortComment)
+	{
+		this.shortComment = "".equals(shortComment) ? null : shortComment;
+	}
+	
+	public boolean hasShortComment()
+	{
+		return shortComment != null;
 	}
 	
 	public void setComponent(JComponent component)
@@ -85,7 +103,7 @@ public class WrappedTicket
 	
 	public boolean isModified()
 	{
-		return customType != null || customTitle != null || customBody != null;
+		return customType != null || customTitle != null || customBody != null || shortComment != null;
 	}
 	
 	public Type getRawType()

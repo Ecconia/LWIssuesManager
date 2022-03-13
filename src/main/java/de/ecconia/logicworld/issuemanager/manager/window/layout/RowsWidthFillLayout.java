@@ -32,6 +32,10 @@ public class RowsWidthFillLayout implements LayoutManager
 		int height = 0;
 		for(Component child : parent.getComponents())
 		{
+			if(!child.isVisible())
+			{
+				continue;
+			}
 			height += child.getPreferredSize().height;
 		}
 		return new Dimension(referenceComponent.getWidth() - insets.left - insets.right, height + insets.top + insets.bottom);
@@ -44,6 +48,10 @@ public class RowsWidthFillLayout implements LayoutManager
 		int height = 0;
 		for(Component child : parent.getComponents())
 		{
+			if(!child.isVisible())
+			{
+				continue;
+			}
 			height += child.getMinimumSize().height;
 		}
 		return new Dimension(referenceComponent.getWidth() - insets.left - insets.right, height + insets.top + insets.bottom);
@@ -56,6 +64,11 @@ public class RowsWidthFillLayout implements LayoutManager
 		int y = insets.top;
 		for(Component child : parent.getComponents())
 		{
+			if(!child.isVisible())
+			{
+				child.setBounds(insets.left, y, 0, 0);
+				continue;
+			}
 			int height = child.getMinimumSize().height;
 			child.setBounds(insets.left, y, referenceComponent.getWidth() - insets.left - insets.right, height);
 			y += height;

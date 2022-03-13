@@ -91,6 +91,7 @@ public class Manager
 					ticketJSON.put("type", Type.asNameOrNull(ticket.getRawType()));
 					ticketJSON.put("title", ticket.getRawTitle());
 					ticketJSON.put("body", ticket.getRawBody());
+					ticketJSON.put("sComment", ticket.getShortComment());
 				}
 			}
 		}
@@ -160,6 +161,7 @@ public class Manager
 				Type type = typeString == null ? null : Type.fromString(typeString);
 				String title = ticketJSON.getStringOrNull("title");
 				String body = ticketJSON.getStringOrNull("body");
+				String shortComment = ticketJSON.getString("sComment");
 				
 				WrappedTicket ticket = ticketMap.get(id);
 				if(ticket == null)
@@ -169,11 +171,13 @@ public class Manager
 					System.out.println("  - Type: " + type);
 					System.out.println("  - Title: " + title);
 					System.out.println("  - Body: " + body);
+					System.out.println("  - ShortComment: " + shortComment);
 					continue;
 				}
 				ticket.overwriteType(type);
 				ticket.overwriteTitle(title);
 				ticket.overwriteBody(body);
+				ticket.setShortComment(shortComment);
 			}
 		}
 		

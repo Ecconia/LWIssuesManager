@@ -33,6 +33,7 @@ public class TicketBox extends JPanel implements Refreshable
 	//Refreshables:
 	private final JLabel type;
 	private final CTextArea title;
+	private final CTextArea shortComment;
 	
 	public TicketBox(WrappedTicket ticket)
 	{
@@ -155,6 +156,13 @@ public class TicketBox extends JPanel implements Refreshable
 		title.makeUnfocusable();
 		add(title);
 		
+		shortComment = new CTextArea(ticket.getShortComment(), false);
+		shortComment.setBackground(Color.gray); //Default here is dark gray, hence overwrite.
+		shortComment.setBorder(new EmptyBorder(0, 2, 0, 2)); //Add some padding at the sides.
+		shortComment.makeUnfocusable();
+		shortComment.setVisible(ticket.hasShortComment());
+		add(shortComment);
+		
 		//Bottom section:
 		{
 			JPanel tagBox = new JPanel();
@@ -176,7 +184,11 @@ public class TicketBox extends JPanel implements Refreshable
 	{
 		type.setText(ticket.getType().name());
 		type.setForeground(ticket.getType().getColor());
+		
 		title.setText(ticket.getTitle());
+		
+		shortComment.setText(ticket.getShortComment());
+		shortComment.setVisible(ticket.hasShortComment());
 		
 		invalidate();
 		revalidate();

@@ -23,6 +23,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class TicketViewer
 {
@@ -30,7 +32,7 @@ public class TicketViewer
 	{
 		JFrame window = new JFrame("Ticket: " + ticket.getOriginal().getNumber() + ": " + ticket.getOriginal().getTitle());
 		window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		window.setMinimumSize(new Dimension(300, 200));
+		window.setMinimumSize(new Dimension(200, 150));
 		window.setPreferredSize(new Dimension(500, 500));
 		
 		JPanel content = new JPanel();
@@ -68,16 +70,48 @@ public class TicketViewer
 			//Title:
 			{
 				content.add(new JLabel("Title:"));
-				CTextArea field = new CTextArea(ticket.getTitle(), true);
+				CTextArea field = new CTextArea(ticket.getTitle(), false);
 				content.add(field);
 			}
 			
-			//TODO: Ticket maintainer comment?
+			//Short Comment
+			{
+				content.add(new JLabel("Short Comment:"));
+				CTextArea area = new CTextArea(ticket.getShortComment(), true);
+				area.getDocument().addDocumentListener(new DocumentListener()
+				{
+					@Override
+					public void insertUpdate(DocumentEvent e)
+					{
+						changed();
+					}
+					
+					@Override
+					public void removeUpdate(DocumentEvent e)
+					{
+						changed();
+					}
+					
+					@Override
+					public void changedUpdate(DocumentEvent e)
+					{
+						changed();
+					}
+					
+					private void changed()
+					{
+						String text = area.getText();
+						ticket.setShortComment(text);
+						refreshable.refreshContent();
+					}
+				});
+				content.add(area);
+			}
 			
 			//Body:
 			{
 				content.add(new JLabel("Body:"));
-				CTextArea area = new CTextArea(ticket.getBody(), true);
+				CTextArea area = new CTextArea(ticket.getBody(), false);
 				content.add(area);
 			}
 			
