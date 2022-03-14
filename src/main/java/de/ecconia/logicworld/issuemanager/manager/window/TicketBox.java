@@ -12,9 +12,12 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.net.URI;
 import javax.swing.JLabel;
@@ -26,8 +29,6 @@ public class TicketBox extends JPanel implements Refreshable
 {
 	private final WrappedTicket ticket;
 	
-	private boolean downOnThis = false;
-	private boolean dragged = false;
 	private TicketColumn currentColumn;
 	
 	//Refreshables:
@@ -42,74 +43,6 @@ public class TicketBox extends JPanel implements Refreshable
 		setBackground(Color.gray);
 		setBorder(new LineBorder(Color.darkGray, 5));
 		setLayout(new RowsWidthFillLayout(this));
-		
-		addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent e)
-			{
-				downOnThis = true;
-				dragged = false;
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				downOnThis = false;
-			}
-			
-			@Override
-			public void mouseReleased(MouseEvent event)
-			{
-				downOnThis = false;
-				if(dragged)
-				{
-					return;
-				}
-				if((event.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) != 0)
-				{
-					try
-					{
-						if(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
-						{
-							Desktop.getDesktop().browse(new URI("https://logicworld.net/tracker/" + ticket.getOriginal().getNumber()));
-						}
-						else
-						{
-							System.out.println("Cannot open browser, insufficient capabilities.");
-						}
-					}
-					catch(Exception e)
-					{
-						System.out.println("Could not open browser, because an exception occurred:");
-						e.printStackTrace();
-					}
-				}
-				else
-				{
-					new TicketViewer(ticket, TicketBox.this);
-				}
-			}
-		});
-		addMouseMotionListener(new MouseMotionAdapter()
-		{
-			@Override
-			public void mouseDragged(MouseEvent e)
-			{
-				if(downOnThis)
-				{
-					dragged = true;
-					downOnThis = false;
-					BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-					Graphics2D g = image.createGraphics();
-					paint(g);
-					g.dispose();
-					//Cannot remove ticket already, because then a lot of things related to mouse events break.
-					// Thank you Swing.
-					ManagerGUI.instance.startDragging(TicketBox.this, image, e.getPoint());
-				}
-			}
-		});
 		
 		//Top section:
 		{
@@ -177,6 +110,60 @@ public class TicketBox extends JPanel implements Refreshable
 				tagBox.add(tagText);
 			}
 		}
+		
+		DragGestureListener dragListener = new DragGestureListener()
+		{
+			@Override
+			public void dragGestureRecognized(DragGestureEvent e)
+			{
+				BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+				Graphics2D g = image.createGraphics();
+				paint(g);
+				g.dispose();
+				//Cannot remove ticket already, because then a lot of things related to mouse events break.
+				// Thank you Swing.
+				ManagerGUI.instance.startDragging(TicketBox.this, image, e.getDragOrigin());
+			}
+		};
+		MouseAdapter clickHandler = new MouseAdapter()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if((e.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) != 0)
+				{
+					try
+					{
+						if(Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+						{
+							Desktop.getDesktop().browse(new URI("https://logicworld.net/tracker/" + ticket.getOriginal().getNumber()));
+						}
+						else
+						{
+							System.out.println("Cannot open browser, insufficient capabilities.");
+						}
+					}
+					catch(Exception ex)
+					{
+						System.out.println("Could not open browser, because an exception occurred:");
+						ex.printStackTrace();
+					}
+				}
+				else
+				{
+					new TicketViewer(ticket, TicketBox.this);
+				}
+			}
+		};
+		
+		//Choosing Actions randomly "I buy all".
+		new DragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE | DnDConstants.ACTION_LINK, dragListener);
+		addMouseListener(clickHandler);
+		//Text areas need this special registrations, to overwrite their DnD & MouseHandling stuff:
+		new DragSource().createDefaultDragGestureRecognizer(title, DnDConstants.ACTION_COPY_OR_MOVE | DnDConstants.ACTION_LINK, dragListener);
+		title.addMouseListener(clickHandler);
+		new DragSource().createDefaultDragGestureRecognizer(shortComment, DnDConstants.ACTION_COPY_OR_MOVE | DnDConstants.ACTION_LINK, dragListener);
+		shortComment.addMouseListener(clickHandler);
 	}
 	
 	@Override
