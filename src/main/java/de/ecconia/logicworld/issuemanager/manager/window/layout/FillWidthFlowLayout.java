@@ -41,7 +41,7 @@ public class FillWidthFlowLayout implements LayoutManager
 	@Override
 	public Dimension minimumLayoutSize(Container parent)
 	{
-		Insets insets = reference.getInsets();
+		Insets insets = parent.getInsets();
 		int maxWidth = getWidth();
 		Component[] children = parent.getComponents();
 		int[] widths = new int[children.length];
@@ -118,7 +118,7 @@ public class FillWidthFlowLayout implements LayoutManager
 	@Override
 	public void layoutContainer(Container parent)
 	{
-		Insets insets = reference.getInsets();
+		Insets insets = parent.getInsets();
 		int maxWidth = getWidth();
 		Component[] children = parent.getComponents();
 		int[] widths = new int[children.length];
