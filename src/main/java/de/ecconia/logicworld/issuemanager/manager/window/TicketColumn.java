@@ -29,8 +29,9 @@ public class TicketColumn extends JPanel
 	private final Category category;
 	private final TicketList list;
 	private final LightScrollPane scroller;
-	private final int width = 150;
 	private final CTextArea title; //To update the count. //TBI: Should filtered tickets be counted? I do not think so.
+	
+	public static int width = 250;
 	
 	public TicketColumn(ColumnContainer groupComponent, Category category)
 	{

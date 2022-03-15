@@ -1,5 +1,6 @@
 package de.ecconia.logicworld.issuemanager.manager.window;
 
+import de.ecconia.logicworld.issuemanager.IssueManager;
 import de.ecconia.logicworld.issuemanager.manager.Manager;
 import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
@@ -16,6 +17,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -37,6 +41,16 @@ public class ManagerGUI
 	{
 		instance = this;
 		this.manager = manager;
+		
+		try
+		{
+			initializeConfig();
+		}
+		catch(IOException e)
+		{
+			System.out.println("Was not able to parse config files, see stacktrace:");
+			e.printStackTrace(System.out);
+		}
 		
 		for(WrappedTicket ticket : manager.getTickets())
 		{
@@ -163,5 +177,35 @@ public class ManagerGUI
 	public Manager getManager()
 	{
 		return manager;
+	}
+	
+	private void initializeConfig() throws IOException
+	{
+		//TODO: Register file watcher.
+		Path configFolder = IssueManager.configFolder;
+		Path columnWidthFile = configFolder.resolve("columnWidth.txt");
+		if(!Files.exists(configFolder))
+		{
+			Files.createDirectories(configFolder);
+		}
+		if(!Files.exists(columnWidthFile))
+		{
+			Files.writeString(columnWidthFile, String.valueOf(TicketColumn.width));
+		}
+		else
+		{
+			String content = Files.readString(columnWidthFile);
+			if(content != null && !content.isBlank())
+			{
+				try
+				{
+					TicketColumn.width = Integer.parseInt(content.replace('\n', ' ').trim());;
+				}
+				catch(NumberFormatException e)
+				{
+					System.out.println("Could not parse column width: " + e.getMessage());
+				}
+			}
+		}
 	}
 }

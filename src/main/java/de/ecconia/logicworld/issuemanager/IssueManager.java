@@ -17,6 +17,7 @@ public class IssueManager
 	public static final Path rootFolder = Paths.get("LWIssueManager");
 	public static final Path dataFile = rootFolder.resolve("data.json");
 	public static final Path issueFolder = rootFolder.resolve("issues");
+	public static final Path configFolder = rootFolder.resolve("config");
 	
 	public static void main(String[] args) throws IOException
 	{
