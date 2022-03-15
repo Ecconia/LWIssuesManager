@@ -59,6 +59,7 @@ public class ManagerGUI
 		contentPane.setLayout(new BorderLayout());
 		{
 			JPanel topBars = new JPanel(new RowsWidthFillLayout(window));
+			topBars.setBackground(Color.gray);
 			contentPane.add(topBars, BorderLayout.NORTH);
 			
 			//TODO: Also register this as field, in case that something gets deleted - or better register a listener to the manager.
