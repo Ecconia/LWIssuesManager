@@ -17,9 +17,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -60,7 +65,7 @@ public class ManagerGUI
 		}
 		
 		//Setup window:
-		JFrame window = new JFrame("LogicWorld Ticket-Manager");
+		JFrame window = new JFrame("LogicWorld Ticket-Manager Version: " + loadVersion());
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setMinimumSize(new Dimension(250, 200));
 		window.setPreferredSize(new Dimension(800, 600));
@@ -202,7 +207,7 @@ public class ManagerGUI
 			{
 				try
 				{
-					TicketColumn.width = Integer.parseInt(content.replace('\n', ' ').trim());;
+					TicketColumn.width = Integer.parseInt(content.replace('\n', ' ').trim());
 				}
 				catch(NumberFormatException e)
 				{
@@ -223,13 +228,36 @@ public class ManagerGUI
 			{
 				try
 				{
-					fontSize = Integer.parseInt(content.replace('\n', ' ').trim());;
+					fontSize = Integer.parseInt(content.replace('\n', ' ').trim());
 				}
 				catch(NumberFormatException e)
 				{
 					System.out.println("Could not parse column width: " + e.getMessage());
 				}
 			}
+		}
+	}
+	
+	private static String loadVersion()
+	{
+		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+		try(InputStream is = classLoader.getResourceAsStream("version.txt"))
+		{
+			if(is == null)
+			{
+				System.out.println("Version file is not existing.");
+				return "<unknown>";
+			}
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(is)))
+			{
+				return reader.readLine(); //There is only one line.
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception while loading version:");
+			e.printStackTrace(System.out);
+			return "<unknown>";
 		}
 	}
 }
