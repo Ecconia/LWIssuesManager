@@ -9,6 +9,7 @@ import de.ecconia.logicworld.issuemanager.manager.window.helper.CButton;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CDropDown;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CPopup;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CursorInteractableListener;
+import de.ecconia.logicworld.issuemanager.manager.window.layout.FillWidthFlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -44,7 +45,9 @@ public class FilterBar extends JPanel
 		// JPanel presetBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		// presetBar.setBackground(Color.gray);
 		// add(presetBar, BorderLayout.NORTH);
-		configBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		configBar = new JPanel();
+		configBar.setLayout(new FillWidthFlowLayout(configBar, 5));
+		configBar.setBorder(new EmptyBorder(3, 4, 3, 4));
 		configBar.setBackground(Color.gray);
 		add(configBar);
 		

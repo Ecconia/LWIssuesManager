@@ -28,8 +28,8 @@ public class ManagerGUI
 	
 	private final Manager manager;
 	private final DragPane dragPane;
-	private final JPanel contentPane;
 	private final GroupBar groupBar;
+	private final JPanel mainContent;
 	
 	private ColumnContainer currentGroup;
 	
@@ -53,7 +53,7 @@ public class ManagerGUI
 		window.setGlassPane(dragPane);
 		
 		//Add content:
-		contentPane = new JPanel();
+		JPanel contentPane = new JPanel();
 		contentPane.setBackground(Color.darkGray);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout());
@@ -67,8 +67,13 @@ public class ManagerGUI
 			
 			groupBar = new GroupBar(manager, this);
 			topBars.add(groupBar);
+			
 		}
-		JScrollPane scroller = new JScrollPane(contentPane);
+		mainContent = new JPanel();
+		mainContent.setBackground(Color.darkGray);
+		mainContent.setBorder(new EmptyBorder(0, 0, 0, 0));
+		mainContent.setLayout(new BorderLayout());
+		JScrollPane scroller = new JScrollPane(mainContent);
 		scroller.getHorizontalScrollBar().setUnitIncrement(10);
 		scroller.setBorder(new EmptyBorder(0, 0, 0, 0));
 		//Dirty fix for horizontal scrolling:
@@ -99,7 +104,8 @@ public class ManagerGUI
 				}
 			}, AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 		}
-		window.getContentPane().add(scroller);
+		contentPane.add(scroller);
+		window.getContentPane().add(contentPane);
 		
 		//Listeners:
 		{
@@ -130,25 +136,25 @@ public class ManagerGUI
 		}
 		if(currentGroup != null)
 		{
-			contentPane.remove(currentGroup);
+			mainContent.remove(currentGroup);
 		}
 		currentGroup = new ColumnContainer(this, group);
-		contentPane.add(currentGroup);
+		mainContent.add(currentGroup);
 		
-		contentPane.invalidate();
-		contentPane.revalidate();
-		contentPane.repaint();
+		mainContent.invalidate();
+		mainContent.revalidate();
+		mainContent.repaint();
 	}
 	
 	public void deleteGroup(ColumnContainer columnContainer)
 	{
 		if(columnContainer == currentGroup)
 		{
-			contentPane.remove(columnContainer);
+			mainContent.remove(columnContainer);
 			currentGroup = null;
-			contentPane.invalidate();
-			contentPane.revalidate();
-			contentPane.repaint();
+			mainContent.invalidate();
+			mainContent.revalidate();
+			mainContent.repaint();
 		}
 		groupBar.removeButtonFor(columnContainer.getGroup().getName());
 		manager.deleteGroup(columnContainer.getGroup());

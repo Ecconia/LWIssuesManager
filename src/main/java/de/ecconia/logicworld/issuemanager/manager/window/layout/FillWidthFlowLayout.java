@@ -3,6 +3,7 @@ package de.ecconia.logicworld.issuemanager.manager.window.layout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 
 public class FillWidthFlowLayout implements LayoutManager
@@ -40,6 +41,7 @@ public class FillWidthFlowLayout implements LayoutManager
 	@Override
 	public Dimension minimumLayoutSize(Container parent)
 	{
+		Insets insets = reference.getInsets();
 		int maxWidth = getWidth();
 		Component[] children = parent.getComponents();
 		int[] widths = new int[children.length];
@@ -48,7 +50,7 @@ public class FillWidthFlowLayout implements LayoutManager
 			widths[i] = children[i].getMinimumSize().width;
 		}
 		
-		int totalHeight = 0;
+		int totalHeight = insets.top + insets.bottom;
 		int lineHeight = 0;
 		int lineWidth = 0;
 		int lineStartIndex = 0;
@@ -116,6 +118,7 @@ public class FillWidthFlowLayout implements LayoutManager
 	@Override
 	public void layoutContainer(Container parent)
 	{
+		Insets insets = reference.getInsets();
 		int maxWidth = getWidth();
 		Component[] children = parent.getComponents();
 		int[] widths = new int[children.length];
@@ -127,7 +130,7 @@ public class FillWidthFlowLayout implements LayoutManager
 		int lineHeight = 0;
 		int lineWidth = 0;
 		int lineStartIndex = 0;
-		int y = 0;
+		int y = insets.top;
 		
 		for(int i = lineStartIndex; i < children.length; i++)
 		{
@@ -137,7 +140,7 @@ public class FillWidthFlowLayout implements LayoutManager
 				if(lineStartIndex != i)
 				{
 					//Save last line.
-					int x = 0;
+					int x = insets.left;
 					for(int j = lineStartIndex; j < i; j++)
 					{
 						children[j].setBounds(x, y, widths[j], lineHeight);
@@ -148,7 +151,7 @@ public class FillWidthFlowLayout implements LayoutManager
 				
 				//Child won't fit any row... so just squeeze it:
 				int childHeight = children[i].getMinimumSize().height;
-				children[i].setBounds(0, y, widths[i], childHeight);
+				children[i].setBounds(insets.left, y, widths[i], childHeight);
 				y += childHeight;
 				
 				//Init next line:
@@ -169,7 +172,7 @@ public class FillWidthFlowLayout implements LayoutManager
 					//Child won't fit current line, save last line and move it to next line.
 					
 					//Save last line.
-					int x = 0;
+					int x = insets.left;
 					for(int j = lineStartIndex; j < i; j++)
 					{
 						children[j].setBounds(x, y, widths[j], lineHeight);
@@ -196,7 +199,7 @@ public class FillWidthFlowLayout implements LayoutManager
 		if(lineStartIndex < children.length)
 		{
 			//Save last line.
-			int x = 0;
+			int x = insets.left;
 			for(int j = lineStartIndex; j < children.length; j++)
 			{
 				children[j].setBounds(x, y, widths[j], lineHeight);
