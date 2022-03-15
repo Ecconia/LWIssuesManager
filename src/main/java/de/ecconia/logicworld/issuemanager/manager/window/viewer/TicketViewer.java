@@ -4,6 +4,7 @@ import de.ecconia.logicworld.issuemanager.data.Type;
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedComment;
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CDropDown;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
 import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
 import java.awt.Color;
@@ -50,13 +51,13 @@ public class TicketViewer
 			
 			//Author:
 			{
-				content.add(new JLabel("Author:"));
+				content.add(new CLabel("Author:"));
 				content.add(new CTextArea(" " + ticket.getOriginal().getAuthor().getName(), false));
 			}
 			
 			//Type:
 			{
-				content.add(new JLabel("Type:"));
+				content.add(new CLabel("Type:"));
 				CDropDown<Type> dropdown = new CDropDown<>(Type.values());
 				dropdown.setSelectedItem(ticket.getType());
 				dropdown.addActionListener(e -> {
@@ -69,14 +70,14 @@ public class TicketViewer
 			
 			//Title:
 			{
-				content.add(new JLabel("Title:"));
+				content.add(new CLabel("Title:"));
 				CTextArea field = new CTextArea(ticket.getTitle(), false);
 				content.add(field);
 			}
 			
 			//Short Comment
 			{
-				content.add(new JLabel("Short Comment:"));
+				content.add(new CLabel("Short Comment:"));
 				CTextArea area = new CTextArea(ticket.getShortComment(), true);
 				area.getDocument().addDocumentListener(new DocumentListener()
 				{
@@ -110,19 +111,19 @@ public class TicketViewer
 			
 			//Body:
 			{
-				content.add(new JLabel("Body:"));
+				content.add(new CLabel("Body:"));
 				CTextArea area = new CTextArea(ticket.getBody(), false);
 				content.add(area);
 			}
 			
 			//Comments:
 			{
-				content.add(new JLabel("Comments:"));
+				content.add(new CLabel("Comments:"));
 				commentSection = new JPanel();
 				commentSection.setBackground(Color.darkGray);
 				commentSection.setLayout(new RowsWidthFillLayout(scroller.getViewport()));//new BoxLayout(commentSection, BoxLayout.Y_AXIS));
 				content.add(commentSection);
-				commentSection.add(new JLabel("- Loading (coming soon) -"));
+				commentSection.add(new CLabel("- Loading (coming soon) -"));
 			}
 		}
 		
@@ -174,7 +175,7 @@ public class TicketViewer
 			catch(Exception e)
 			{
 				commentSection.removeAll();
-				commentSection.add(new JLabel("Was not able to load comments, see console."));
+				commentSection.add(new CLabel("Was not able to load comments, see console."));
 				System.out.println("Was not able to load comments:");
 				e.printStackTrace(System.out);
 				return;
@@ -184,7 +185,7 @@ public class TicketViewer
 			commentSection.removeAll();
 			if(comments.isEmpty())
 			{
-				JLabel label = new JLabel("   No comments.   ");
+				JLabel label = new CLabel("   No comments.   ");
 				label.setForeground(Color.white);
 				commentSection.add(label);
 			}

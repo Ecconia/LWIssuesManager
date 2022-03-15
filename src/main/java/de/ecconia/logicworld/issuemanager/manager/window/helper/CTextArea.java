@@ -1,5 +1,6 @@
 package de.ecconia.logicworld.issuemanager.manager.window.helper;
 
+import de.ecconia.logicworld.issuemanager.manager.window.ManagerGUI;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -21,6 +22,7 @@ public class CTextArea extends JTextArea
 		setCaretColor(Color.white);
 		setSelectionColor(new Color(0, 100, 0));
 		setSelectedTextColor(Color.white);
+		setFont(getFont().deriveFont((float) ManagerGUI.fontSize));
 		
 		//Handle editable:
 		if(editable)

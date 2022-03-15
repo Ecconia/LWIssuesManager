@@ -7,6 +7,7 @@ import de.ecconia.logicworld.issuemanager.manager.data.FilterEntry;
 import de.ecconia.logicworld.issuemanager.manager.data.FilterGroup;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CButton;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CDropDown;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CPopup;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CursorInteractableListener;
 import de.ecconia.logicworld.issuemanager.manager.window.layout.FillWidthFlowLayout;
@@ -93,7 +94,7 @@ public class FilterBar extends JPanel
 						{
 							continue;
 						}
-						JLabel text = new JLabel(group.getName());
+						JLabel text = new CLabel(group.getName());
 						text.setOpaque(true);
 						text.setBackground(Color.darkGray);
 						text.setBorder(new LineBorder(Color.darkGray, 2));
@@ -153,7 +154,7 @@ public class FilterBar extends JPanel
 			dropDownPanel.setBorder(new EmptyBorder(4, 6, 4, 0)); //We still have some other component to the right, so no padding there.
 			add(dropDownPanel);
 			{
-				JLabel label = new JLabel(filterGroup.getGroup().getName());
+				JLabel label = new CLabel(filterGroup.getGroup().getName());
 				label.setOpaque(true);
 				label.setForeground(Color.white);
 				label.setBackground(Color.darkGray);
@@ -263,7 +264,7 @@ public class FilterBar extends JPanel
 			
 			FilterChoiceBox choice = new FilterChoiceBox();
 			add(choice, BorderLayout.EAST);
-			JLabel label = new JLabel(filterEntry.getName());
+			JLabel label = new CLabel(filterEntry.getName());
 			label.setOpaque(true);
 			label.setBackground(Color.darkGray);
 			label.setForeground(Color.white);

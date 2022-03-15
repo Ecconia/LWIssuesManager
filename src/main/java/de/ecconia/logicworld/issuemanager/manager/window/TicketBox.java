@@ -3,6 +3,7 @@ package de.ecconia.logicworld.issuemanager.manager.window;
 import de.ecconia.logicworld.issuemanager.data.Tag;
 import de.ecconia.logicworld.issuemanager.data.Type;
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
 import de.ecconia.logicworld.issuemanager.manager.window.layout.FillWidthFlowLayout;
 import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
@@ -53,13 +54,13 @@ public class TicketBox extends JPanel implements Refreshable
 			add(headerBox);
 			
 			//ID:
-			JLabel number = new JLabel("#" + ticket.getOriginal().getNumber());
+			JLabel number = new CLabel("#" + ticket.getOriginal().getNumber());
 			number.setBorder(new EmptyBorder(0, 0, 0, 0));
 			number.setForeground(Color.darkGray);
 			headerBox.add(number);
 			
 			//Type:
-			type = new JLabel();
+			type = new CLabel();
 			type.setHorizontalAlignment(JLabel.LEFT);
 			Type actualType = ticket.getType();
 			type.setText(actualType.name());
@@ -75,7 +76,7 @@ public class TicketBox extends JPanel implements Refreshable
 				{
 					message = "CLOSED";
 				}
-				JLabel closedTag = new JLabel(message);
+				JLabel closedTag = new CLabel(message);
 				closedTag.setForeground(Color.red);
 				closedTag.setBorder(new EmptyBorder(0, 0, 0, 0));
 				headerBox.add(closedTag);
@@ -83,7 +84,7 @@ public class TicketBox extends JPanel implements Refreshable
 		}
 		
 		title = new CTextArea(ticket.getTitle(), false);
-		title.setFont(getFont().deriveFont(Font.BOLD)); //Make the field bold.
+		title.setFont(title.getFont().deriveFont(Font.BOLD)); //Make the field bold.
 		title.setBackground(Color.gray); //Default here is dark gray, hence overwrite.
 		title.setBorder(new EmptyBorder(0, 2, 0, 2)); //Add some padding at the sides.
 		title.makeUnfocusable();
@@ -105,7 +106,7 @@ public class TicketBox extends JPanel implements Refreshable
 			add(tagBox);
 			for(Tag tag : ticket.getOriginal().getTags())
 			{
-				JLabel tagText = new JLabel(tag.getName());
+				JLabel tagText = new CLabel(tag.getName());
 				tagText.setForeground(tag.getColor());
 				tagBox.add(tagText);
 			}

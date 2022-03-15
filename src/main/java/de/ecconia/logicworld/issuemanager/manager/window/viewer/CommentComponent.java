@@ -1,6 +1,7 @@
 package de.ecconia.logicworld.issuemanager.manager.window.viewer;
 
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedComment;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.OutlineBorder;
 import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
@@ -16,7 +17,7 @@ public class CommentComponent extends JPanel
 		setLayout(new RowsWidthFillLayout(reference));
 		setBorder(new OutlineBorder());
 		
-		JLabel sender = new JLabel("From: " + comment.getOriginal().getAuthor().getName());
+		JLabel sender = new CLabel("From: " + comment.getOriginal().getAuthor().getName());
 		sender.setOpaque(true);
 		sender.setForeground(Color.white);
 		sender.setBackground(Color.darkGray);

@@ -42,7 +42,7 @@ public class CDropDown<T> extends JPanel
 		
 		popup = new JPopupMenu("DropdownPopup");
 		
-		currentElementCell = new JLabel(elements.length == 0 ? " - Empty - " : elements[activeIndex].toString());
+		currentElementCell = new CLabel(elements.length == 0 ? " - Empty - " : elements[activeIndex].toString());
 		currentElementCell.setOpaque(true);
 		currentElementCell.setBackground(Color.darkGray);
 		currentElementCell.setForeground(Color.white);
@@ -181,7 +181,7 @@ public class CDropDown<T> extends JPanel
 		return elements[activeIndex];
 	}
 	
-	private class EntryLabel extends JLabel
+	private class EntryLabel extends CLabel
 	{
 		private boolean mouseOver;
 		private final T element;

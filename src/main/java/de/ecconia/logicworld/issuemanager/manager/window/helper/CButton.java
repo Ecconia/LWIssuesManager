@@ -1,5 +1,6 @@
 package de.ecconia.logicworld.issuemanager.manager.window.helper;
 
+import de.ecconia.logicworld.issuemanager.manager.window.ManagerGUI;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,6 +20,7 @@ public class CButton extends JButton
 		setBorder(new EmptyBorder(4, 6, 4, 6));
 		setBackground(Color.darkGray);
 		setForeground(Color.white);
+		setFont(getFont().deriveFont((float) ManagerGUI.fontSize));
 		
 		addMouseListener(new MouseAdapter()
 		{

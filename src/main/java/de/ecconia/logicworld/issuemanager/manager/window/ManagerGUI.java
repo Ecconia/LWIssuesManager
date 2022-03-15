@@ -37,6 +37,8 @@ public class ManagerGUI
 	
 	private ColumnContainer currentGroup;
 	
+	public static int fontSize = 12;
+	
 	public ManagerGUI(Manager manager)
 	{
 		instance = this;
@@ -188,6 +190,7 @@ public class ManagerGUI
 		{
 			Files.createDirectories(configFolder);
 		}
+		
 		if(!Files.exists(columnWidthFile))
 		{
 			Files.writeString(columnWidthFile, String.valueOf(TicketColumn.width));
@@ -200,6 +203,27 @@ public class ManagerGUI
 				try
 				{
 					TicketColumn.width = Integer.parseInt(content.replace('\n', ' ').trim());;
+				}
+				catch(NumberFormatException e)
+				{
+					System.out.println("Could not parse column width: " + e.getMessage());
+				}
+			}
+		}
+		
+		Path fileSizeFile = configFolder.resolve("fontSize.txt");
+		if(!Files.exists(fileSizeFile))
+		{
+			Files.writeString(fileSizeFile, String.valueOf(fontSize));
+		}
+		else
+		{
+			String content = Files.readString(fileSizeFile);
+			if(content != null && !content.isBlank())
+			{
+				try
+				{
+					fontSize = Integer.parseInt(content.replace('\n', ' ').trim());;
 				}
 				catch(NumberFormatException e)
 				{

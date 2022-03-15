@@ -3,6 +3,7 @@ package de.ecconia.logicworld.issuemanager.manager.window;
 import de.ecconia.logicworld.issuemanager.manager.data.Category;
 import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CButton;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -36,7 +37,7 @@ public class ColumnContainer extends JPanel
 			header.setLayout(new FlowLayout(FlowLayout.LEFT));
 			header.setBackground(Color.gray);
 			
-			header.add(new JLabel("Group: " + group.getName() + "     "));
+			header.add(new CLabel("Group: " + group.getName() + "     "));
 			CButton addCategory = new CButton("Add category");
 			addCategory.addActionListener(e -> {
 				String input = JOptionPane.showInputDialog(null, "Name for the new category:");
