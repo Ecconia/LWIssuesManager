@@ -65,7 +65,7 @@ public class ManagerGUI
 		}
 		
 		//Setup window:
-		JFrame window = new JFrame("LogicWorld Ticket-Manager Version: " + loadVersion());
+		JFrame window = new JFrame("LogicWorld Ticket-Manager Version: " + IssueManager.version);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setMinimumSize(new Dimension(250, 200));
 		window.setPreferredSize(new Dimension(800, 600));
@@ -235,29 +235,6 @@ public class ManagerGUI
 					System.out.println("Could not parse column width: " + e.getMessage());
 				}
 			}
-		}
-	}
-	
-	private static String loadVersion()
-	{
-		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-		try(InputStream is = classLoader.getResourceAsStream("version.txt"))
-		{
-			if(is == null)
-			{
-				System.out.println("Version file is not existing.");
-				return "<unknown>";
-			}
-			try(BufferedReader reader = new BufferedReader(new InputStreamReader(is)))
-			{
-				return reader.readLine(); //There is only one line.
-			}
-		}
-		catch(Exception e)
-		{
-			System.out.println("Exception while loading version:");
-			e.printStackTrace(System.out);
-			return "<unknown>";
 		}
 	}
 }

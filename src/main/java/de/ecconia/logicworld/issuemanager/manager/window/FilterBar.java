@@ -139,6 +139,8 @@ public class FilterBar extends JPanel
 		}
 	}
 	
+	//TODO: Make right click have fancy filter selection functions, such as inverted select.
+	
 	private class FilterDropDown extends JPanel
 	{
 		private CPopup popup;
