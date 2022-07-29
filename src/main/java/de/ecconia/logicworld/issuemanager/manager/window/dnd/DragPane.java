@@ -40,7 +40,7 @@ public class DragPane
 		overlay.setAlwaysOnTop(true);
 		
 		//Dirty, but sadly Java-Swing is very hostile when it comes to event distribution, so lets be hostile ourself.
-		long eventMask = AWTEvent.MOUSE_MOTION_EVENT_MASK + AWTEvent.MOUSE_EVENT_MASK;
+		long eventMask = AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_WHEEL_EVENT_MASK;
 		Toolkit.getDefaultToolkit().addAWTEventListener(e -> {
 			if(overlay.isVisible())
 			{
@@ -60,33 +60,35 @@ public class DragPane
 					overlay.setVisible(false);
 					overlay.getContentPane().removeAll();
 				}
-				else if(event.getID() == MouseEvent.MOUSE_DRAGGED)
+				else if(event.getID() == MouseEvent.MOUSE_DRAGGED || event.getID() == MouseEvent.MOUSE_WHEEL) //Mouse wheel might have moved the canvas below.
 				{
 					Point newPos = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), content);
-					if(!newPos.equals(pos))
 					{
+						//Find the target position!
+						Dropable dropable = getDropableAt(newPos);
+						if(dropable != lastDropable)
 						{
-							//Find the target position!
-							Dropable dropable = getDropableAt(newPos);
-							if(dropable != lastDropable)
+							if(lastDropable != null)
 							{
-								if(lastDropable != null)
-								{
-									lastDropable.stopHighlight();
-								}
-								lastDropable = dropable;
+								lastDropable.stopHighlight();
 							}
-							if(dropable != null)
-							{
-								Point childPoint = SwingUtilities.convertPoint(content, newPos, (Component) dropable);
-								dropable.updateHighlight(childPoint);
-							}
+							lastDropable = dropable;
 						}
-						pos = newPos;
-						overlay.setLocation(event.getXOnScreen() - offset.x, event.getYOnScreen() - offset.y);
+						if(dropable != null)
+						{
+							Point childPoint = SwingUtilities.convertPoint(content, newPos, (Component) dropable);
+							dropable.updateHighlight(childPoint);
+						}
 					}
+					pos = newPos;
+					overlay.setLocation(event.getXOnScreen() - offset.x, event.getYOnScreen() - offset.y);
 				}
-				event.consume();
+				
+				if(event.getID() != MouseEvent.MOUSE_WHEEL)
+				{
+					//Do not consume the event, if it was the mouse-wheel one. It can be used to scroll the main windows scroll area.
+					event.consume();
+				}
 			}
 		}, eventMask);
 	}
@@ -117,5 +119,10 @@ public class DragPane
 		overlay.getContentPane().add(new JLabel(new ImageIcon(image)));
 		overlay.pack();
 		overlay.setVisible(true);
+	}
+	
+	public boolean isActive()
+	{
+		return overlay.isVisible();
 	}
 }

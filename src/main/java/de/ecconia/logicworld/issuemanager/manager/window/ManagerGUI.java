@@ -97,7 +97,7 @@ public class ManagerGUI
 		//Dirty fix for horizontal scrolling:
 		{
 			Toolkit.getDefaultToolkit().addAWTEventListener(e -> {
-				if(!window.isActive())
+				if(!window.isActive() && !dragPane.isActive())
 				{
 					return;
 				}
