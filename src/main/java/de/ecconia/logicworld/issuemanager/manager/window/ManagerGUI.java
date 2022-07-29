@@ -1,11 +1,5 @@
 package de.ecconia.logicworld.issuemanager.manager.window;
 
-import de.ecconia.logicworld.issuemanager.IssueManager;
-import de.ecconia.logicworld.issuemanager.manager.Manager;
-import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
-import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
-import de.ecconia.logicworld.issuemanager.manager.window.dnd.DragPane;
-import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,19 +11,22 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Collectors;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+
+import de.ecconia.logicworld.issuemanager.IssueManager;
+import de.ecconia.logicworld.issuemanager.manager.Manager;
+import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
+import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
+import de.ecconia.logicworld.issuemanager.manager.window.dnd.DragPane;
+import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
 
 public class ManagerGUI
 {

@@ -1,12 +1,11 @@
 package de.ecconia.logicworld.issuemanager.manager.window.helper;
 
-import de.ecconia.logicworld.issuemanager.manager.window.ManagerGUI;
 import java.awt.Color;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
+
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
+
+import de.ecconia.logicworld.issuemanager.manager.window.ManagerGUI;
 
 public class CTextArea extends JTextArea
 {

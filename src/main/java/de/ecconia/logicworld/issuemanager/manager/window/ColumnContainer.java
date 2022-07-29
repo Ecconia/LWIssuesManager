@@ -1,9 +1,5 @@
 package de.ecconia.logicworld.issuemanager.manager.window;
 
-import de.ecconia.logicworld.issuemanager.manager.data.Category;
-import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CButton;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -13,9 +9,14 @@ import java.awt.FlowLayout;
 import java.awt.LayoutManager;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JLabel;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import de.ecconia.logicworld.issuemanager.manager.data.Category;
+import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CButton;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 
 public class ColumnContainer extends JPanel
 {

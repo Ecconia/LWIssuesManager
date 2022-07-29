@@ -1,14 +1,5 @@
 package de.ecconia.logicworld.issuemanager.manager.window;
 
-import de.ecconia.logicworld.issuemanager.data.Tag;
-import de.ecconia.logicworld.issuemanager.data.Type;
-import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
-import de.ecconia.logicworld.issuemanager.manager.window.layout.FillWidthFlowLayout;
-import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
-import de.ecconia.logicworld.issuemanager.manager.window.viewer.Refreshable;
-import de.ecconia.logicworld.issuemanager.manager.window.viewer.TicketViewer;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
@@ -21,10 +12,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.URI;
+
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import de.ecconia.logicworld.issuemanager.data.Tag;
+import de.ecconia.logicworld.issuemanager.data.Type;
+import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
+import de.ecconia.logicworld.issuemanager.manager.window.layout.FillWidthFlowLayout;
+import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
+import de.ecconia.logicworld.issuemanager.manager.window.viewer.Refreshable;
+import de.ecconia.logicworld.issuemanager.manager.window.viewer.TicketViewer;
 
 public class TicketBox extends JPanel implements Refreshable
 {

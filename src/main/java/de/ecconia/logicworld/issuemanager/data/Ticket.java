@@ -1,11 +1,12 @@
 package de.ecconia.logicworld.issuemanager.data;
 
-import de.ecconia.java.json.JSONArray;
-import de.ecconia.java.json.JSONObject;
-import de.ecconia.logicworld.issuemanager.downloader.IssueDownloader;
 import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.ecconia.java.json.JSONArray;
+import de.ecconia.java.json.JSONObject;
+import de.ecconia.logicworld.issuemanager.downloader.IssueDownloader;
 
 public class Ticket
 {

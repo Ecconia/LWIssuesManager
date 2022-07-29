@@ -1,5 +1,23 @@
 package de.ecconia.logicworld.issuemanager.manager.window;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
 import de.ecconia.logicworld.issuemanager.manager.FilterManager;
 import de.ecconia.logicworld.issuemanager.manager.Manager;
 import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
@@ -11,23 +29,6 @@ import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CPopup;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CursorInteractableListener;
 import de.ecconia.logicworld.issuemanager.manager.window.layout.FillWidthFlowLayout;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 public class FilterBar extends JPanel
 {

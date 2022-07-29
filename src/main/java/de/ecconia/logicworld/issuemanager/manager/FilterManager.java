@@ -1,11 +1,12 @@
 package de.ecconia.logicworld.issuemanager.manager;
 
-import de.ecconia.logicworld.issuemanager.manager.data.Filter;
-import de.ecconia.logicworld.issuemanager.manager.data.FilterGroup;
-import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.ecconia.logicworld.issuemanager.manager.data.Filter;
+import de.ecconia.logicworld.issuemanager.manager.data.FilterGroup;
+import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
 
 public class FilterManager
 {

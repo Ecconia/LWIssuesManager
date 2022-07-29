@@ -1,11 +1,5 @@
 package de.ecconia.logicworld.issuemanager.downloader;
 
-import de.ecconia.java.json.JSONArray;
-import de.ecconia.java.json.JSONNode;
-import de.ecconia.java.json.JSONObject;
-import de.ecconia.java.json.JSONParser;
-import de.ecconia.logicworld.issuemanager.IssueManager;
-import de.ecconia.logicworld.issuemanager.data.Comment;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,10 +7,17 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.net.ssl.HttpsURLConnection;
+
+import de.ecconia.java.json.JSONArray;
+import de.ecconia.java.json.JSONNode;
+import de.ecconia.java.json.JSONObject;
+import de.ecconia.java.json.JSONParser;
+import de.ecconia.logicworld.issuemanager.IssueManager;
+import de.ecconia.logicworld.issuemanager.data.Comment;
 
 public class IssueDownloader
 {

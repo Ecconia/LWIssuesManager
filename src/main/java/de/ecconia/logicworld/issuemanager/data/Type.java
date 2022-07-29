@@ -1,7 +1,8 @@
 package de.ecconia.logicworld.issuemanager.data;
 
-import de.ecconia.java.json.JSONObject;
 import java.awt.Color;
+
+import de.ecconia.java.json.JSONObject;
 
 public enum Type
 {

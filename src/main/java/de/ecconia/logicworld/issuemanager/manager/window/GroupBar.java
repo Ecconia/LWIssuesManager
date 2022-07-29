@@ -1,16 +1,17 @@
 package de.ecconia.logicworld.issuemanager.manager.window;
 
-import de.ecconia.logicworld.issuemanager.manager.Manager;
-import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CButton;
-import de.ecconia.logicworld.issuemanager.manager.window.layout.FillWidthFlowLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import de.ecconia.logicworld.issuemanager.manager.Manager;
+import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CButton;
+import de.ecconia.logicworld.issuemanager.manager.window.layout.FillWidthFlowLayout;
 
 //TODO: Highlight current group.
 public class GroupBar extends JPanel

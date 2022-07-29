@@ -1,7 +1,8 @@
 package de.ecconia.logicworld.issuemanager.manager.window.dnd;
 
-import de.ecconia.logicworld.issuemanager.manager.window.TicketBox;
 import java.awt.Point;
+
+import de.ecconia.logicworld.issuemanager.manager.window.TicketBox;
 
 public interface Dropable
 {

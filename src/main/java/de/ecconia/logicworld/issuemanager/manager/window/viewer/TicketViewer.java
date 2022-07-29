@@ -1,12 +1,5 @@
 package de.ecconia.logicworld.issuemanager.manager.window.viewer;
 
-import de.ecconia.logicworld.issuemanager.data.Type;
-import de.ecconia.logicworld.issuemanager.manager.data.WrappedComment;
-import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CDropDown;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
-import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.KeyEventDispatcher;
@@ -17,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,6 +20,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import de.ecconia.logicworld.issuemanager.data.Type;
+import de.ecconia.logicworld.issuemanager.manager.data.WrappedComment;
+import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CDropDown;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
+import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
 
 public class TicketViewer
 {

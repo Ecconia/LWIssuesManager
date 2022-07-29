@@ -1,11 +1,13 @@
 package de.ecconia.logicworld.issuemanager.manager.window.helper;
 
-import de.ecconia.logicworld.issuemanager.manager.window.ManagerGUI;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
+
+import de.ecconia.logicworld.issuemanager.manager.window.ManagerGUI;
 
 public class CButton extends JButton
 {

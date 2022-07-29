@@ -1,10 +1,9 @@
 package de.ecconia.logicworld.issuemanager.manager.data;
 
-import de.ecconia.logicworld.issuemanager.manager.FilterManager;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import de.ecconia.logicworld.issuemanager.manager.FilterManager;
 
 public class Filter
 {

@@ -1,10 +1,5 @@
 package de.ecconia.logicworld.issuemanager;
 
-import de.ecconia.java.json.JSONObject;
-import de.ecconia.java.json.JSONParser;
-import de.ecconia.logicworld.issuemanager.data.Ticket;
-import de.ecconia.logicworld.issuemanager.downloader.IssueDownloader;
-import de.ecconia.logicworld.issuemanager.manager.Manager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.ecconia.java.json.JSONObject;
+import de.ecconia.java.json.JSONParser;
+import de.ecconia.logicworld.issuemanager.data.Ticket;
+import de.ecconia.logicworld.issuemanager.downloader.IssueDownloader;
+import de.ecconia.logicworld.issuemanager.manager.Manager;
 
 public class IssueManager
 {

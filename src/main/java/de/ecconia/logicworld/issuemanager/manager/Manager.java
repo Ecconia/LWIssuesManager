@@ -1,5 +1,12 @@
 package de.ecconia.logicworld.issuemanager.manager;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import de.ecconia.java.json.JSONArray;
 import de.ecconia.java.json.JSONObject;
 import de.ecconia.java.json.JSONParser;
@@ -11,12 +18,6 @@ import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
 import de.ecconia.logicworld.issuemanager.manager.window.ManagerGUI;
 import de.ecconia.logicworld.issuemanager.util.OrderedMap;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Manager
 {

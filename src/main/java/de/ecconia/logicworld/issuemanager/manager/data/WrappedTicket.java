@@ -1,13 +1,15 @@
 package de.ecconia.logicworld.issuemanager.manager.data;
 
-import de.ecconia.logicworld.issuemanager.data.Comment;
-import de.ecconia.logicworld.issuemanager.data.Ticket;
-import de.ecconia.logicworld.issuemanager.data.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.JComponent;
+
+import de.ecconia.logicworld.issuemanager.data.Comment;
+import de.ecconia.logicworld.issuemanager.data.Ticket;
+import de.ecconia.logicworld.issuemanager.data.Type;
 
 public class WrappedTicket
 {

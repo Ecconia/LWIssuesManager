@@ -1,12 +1,5 @@
 package de.ecconia.logicworld.issuemanager.manager.window;
 
-import de.ecconia.logicworld.issuemanager.manager.data.Category;
-import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
-import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
-import de.ecconia.logicworld.issuemanager.manager.window.dnd.Dropable;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CButton;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
-import de.ecconia.logicworld.issuemanager.manager.window.helper.LightScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -19,10 +12,19 @@ import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Collection;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import de.ecconia.logicworld.issuemanager.manager.data.Category;
+import de.ecconia.logicworld.issuemanager.manager.data.CategoryGroup;
+import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
+import de.ecconia.logicworld.issuemanager.manager.window.dnd.Dropable;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CButton;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
+import de.ecconia.logicworld.issuemanager.manager.window.helper.LightScrollPane;
 
 public class TicketColumn extends JPanel
 {

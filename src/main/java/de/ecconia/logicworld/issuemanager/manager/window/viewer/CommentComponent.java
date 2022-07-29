@@ -1,14 +1,16 @@
 package de.ecconia.logicworld.issuemanager.manager.window.viewer;
 
+import java.awt.Color;
+import java.awt.Container;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedComment;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.OutlineBorder;
 import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLayout;
-import java.awt.Color;
-import java.awt.Container;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class CommentComponent extends JPanel
 {

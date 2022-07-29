@@ -1,8 +1,9 @@
 package de.ecconia.logicworld.issuemanager.manager.data;
 
-import de.ecconia.logicworld.issuemanager.data.Comment;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.ecconia.logicworld.issuemanager.data.Comment;
 
 public class WrappedComment
 {
