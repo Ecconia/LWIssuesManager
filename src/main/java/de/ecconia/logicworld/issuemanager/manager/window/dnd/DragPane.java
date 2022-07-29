@@ -1,32 +1,43 @@
 package de.ecconia.logicworld.issuemanager.manager.window.dnd;
 
-import de.ecconia.logicworld.issuemanager.manager.window.TicketBox;
 import java.awt.AWTEvent;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import javax.swing.JComponent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-public class DragPane extends JComponent
+import de.ecconia.logicworld.issuemanager.manager.window.TicketBox;
+
+public class DragPane
 {
 	private final Container content;
+	private final JDialog overlay;
 	
 	private Dropable lastDropable;
-	private BufferedImage image;
 	private Point pos;
 	private Point offset;
 	private TicketBox ticket;
 	
-	public DragPane(Container content)
+	public DragPane(JFrame parent, Container content)
 	{
 		this.content = content;
-		setLayout(null);
+		
+		overlay = new JDialog(parent);
+		overlay.setUndecorated(true);
+		overlay.setSize(100, 100);
+		overlay.setBackground(Color.orange);
+		overlay.setResizable(false);
+		overlay.setAlwaysOnTop(true);
 		
 		//Dirty, but sadly Java-Swing is very hostile when it comes to event distribution, so lets be hostile ourself.
 		long eventMask = AWTEvent.MOUSE_MOTION_EVENT_MASK + AWTEvent.MOUSE_EVENT_MASK;
@@ -34,27 +45,27 @@ public class DragPane extends JComponent
 		{
 			public void eventDispatched(AWTEvent e)
 			{
-				if(image != null)
+				if(overlay.isVisible())
 				{
 					MouseEvent event = (MouseEvent) e;
 					if(event.getID() == MouseEvent.MOUSE_RELEASED)
 					{
-						//Must have been released!
-						setVisible(false);
-						image = null;
 						if(lastDropable != null)
 						{
 							lastDropable.stopHighlight();
-							Point childPoint = SwingUtilities.convertPoint(DragPane.this, pos, (Component) lastDropable);
+							Point childPoint = SwingUtilities.convertPoint(content, pos, (Component) lastDropable);
 							lastDropable.drop(childPoint, ticket);
 							lastDropable = null;
 						}
 						ticket = null;
 						pos = null;
+						
+						overlay.setVisible(false);
+						overlay.getContentPane().removeAll();
 					}
 					else if(event.getID() == MouseEvent.MOUSE_DRAGGED)
 					{
-						Point newPos = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), DragPane.this);
+						Point newPos = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), content);
 						if(!newPos.equals(pos))
 						{
 							{
@@ -70,12 +81,12 @@ public class DragPane extends JComponent
 								}
 								if(dropable != null)
 								{
-									Point childPoint = SwingUtilities.convertPoint(DragPane.this, newPos, (Component) dropable);
+									Point childPoint = SwingUtilities.convertPoint(content, newPos, (Component) dropable);
 									dropable.updateHighlight(childPoint);
 								}
 							}
 							pos = newPos;
-							repaint();
+							overlay.setLocation(event.getXOnScreen() - offset.x, event.getYOnScreen() - offset.y);
 						}
 					}
 					event.consume();
@@ -97,26 +108,18 @@ public class DragPane extends JComponent
 			{
 				return (Dropable) comp;
 			}
-			comp =  comp.getParent();
+			comp = comp.getParent();
 		}
 		while(true);
 	}
 	
 	public void setImage(BufferedImage image, Point offset, TicketBox ticket)
 	{
-		setVisible(true);
 		this.offset = offset;
-		this.image = image;
 		this.ticket = ticket;
-		repaint();
-	}
-	
-	@Override
-	public void paint(Graphics g)
-	{
-		if(image != null && pos != null)
-		{
-			g.drawImage(image, pos.x - offset.x, pos.y - offset.y, image.getWidth(), image.getHeight(), null);
-		}
+		
+		overlay.getContentPane().add(new JLabel(new ImageIcon(image)));
+		overlay.pack();
+		overlay.setVisible(true);
 	}
 }

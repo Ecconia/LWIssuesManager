@@ -69,8 +69,7 @@ public class ManagerGUI
 		window.setMinimumSize(new Dimension(250, 200));
 		window.setPreferredSize(new Dimension(800, 600));
 		window.getContentPane().setLayout(new BorderLayout());
-		dragPane = new DragPane(window.getContentPane());
-		window.setGlassPane(dragPane);
+		dragPane = new DragPane(window, window.getContentPane());
 		
 		//Add content:
 		JPanel contentPane = new JPanel();
