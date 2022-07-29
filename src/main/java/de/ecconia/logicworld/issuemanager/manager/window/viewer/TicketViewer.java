@@ -31,7 +31,7 @@ import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLay
 
 public class TicketViewer
 {
-	public TicketViewer(WrappedTicket ticket, Refreshable refreshable)
+	public TicketViewer(JFrame parentWindow, WrappedTicket ticket, Refreshable refreshable)
 	{
 		JFrame window = new JFrame("Ticket: " + ticket.getOriginal().getNumber() + ": " + ticket.getOriginal().getTitle());
 		window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -164,8 +164,8 @@ public class TicketViewer
 		
 		//Make the window visible:
 		window.pack();
-		//TODO: Set location relative to parent instead!
-		window.setLocationRelativeTo(null);
+		//TODO: Inject the location of the parent window in a better way.
+		window.setLocationRelativeTo(parentWindow);
 		window.setVisible(true);
 		
 		//Load the comments (async):

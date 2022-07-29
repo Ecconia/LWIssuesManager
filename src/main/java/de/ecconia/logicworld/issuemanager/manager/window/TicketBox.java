@@ -40,7 +40,7 @@ public class TicketBox extends JPanel implements Refreshable
 	private final CTextArea title;
 	private final CTextArea shortComment;
 	
-	public TicketBox(WrappedTicket ticket)
+	public TicketBox(final JFrame parentWindow, WrappedTicket ticket)
 	{
 		this.ticket = ticket;
 		
@@ -155,7 +155,7 @@ public class TicketBox extends JPanel implements Refreshable
 				}
 				else
 				{
-					new TicketViewer(ticket, TicketBox.this);
+					new TicketViewer(parentWindow, ticket, TicketBox.this);
 				}
 			}
 		};

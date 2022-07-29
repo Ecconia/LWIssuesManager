@@ -56,13 +56,15 @@ public class ManagerGUI
 			e.printStackTrace(System.out);
 		}
 		
+		//Create window:
+		JFrame window = new JFrame("LogicWorld Ticket-Manager Version: " + IssueManager.version);
+		
 		for(WrappedTicket ticket : manager.getTickets())
 		{
-			ticket.setComponent(new TicketBox(ticket));
+			ticket.setComponent(new TicketBox(window, ticket));
 		}
 		
 		//Setup window:
-		JFrame window = new JFrame("LogicWorld Ticket-Manager Version: " + IssueManager.version);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setMinimumSize(new Dimension(250, 200));
 		window.setPreferredSize(new Dimension(800, 600));
