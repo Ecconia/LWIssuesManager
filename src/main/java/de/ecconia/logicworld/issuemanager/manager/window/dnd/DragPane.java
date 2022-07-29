@@ -41,56 +41,52 @@ public class DragPane
 		
 		//Dirty, but sadly Java-Swing is very hostile when it comes to event distribution, so lets be hostile ourself.
 		long eventMask = AWTEvent.MOUSE_MOTION_EVENT_MASK + AWTEvent.MOUSE_EVENT_MASK;
-		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener()
-		{
-			public void eventDispatched(AWTEvent e)
+		Toolkit.getDefaultToolkit().addAWTEventListener(e -> {
+			if(overlay.isVisible())
 			{
-				if(overlay.isVisible())
+				MouseEvent event = (MouseEvent) e;
+				if(event.getID() == MouseEvent.MOUSE_RELEASED)
 				{
-					MouseEvent event = (MouseEvent) e;
-					if(event.getID() == MouseEvent.MOUSE_RELEASED)
+					if(lastDropable != null)
 					{
-						if(lastDropable != null)
-						{
-							lastDropable.stopHighlight();
-							Point childPoint = SwingUtilities.convertPoint(content, pos, (Component) lastDropable);
-							lastDropable.drop(childPoint, ticket);
-							lastDropable = null;
-						}
-						ticket = null;
-						pos = null;
-						
-						overlay.setVisible(false);
-						overlay.getContentPane().removeAll();
+						lastDropable.stopHighlight();
+						Point childPoint = SwingUtilities.convertPoint(content, pos, (Component) lastDropable);
+						lastDropable.drop(childPoint, ticket);
+						lastDropable = null;
 					}
-					else if(event.getID() == MouseEvent.MOUSE_DRAGGED)
-					{
-						Point newPos = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), content);
-						if(!newPos.equals(pos))
-						{
-							{
-								//Find the target position!
-								Dropable dropable = getDropableAt(newPos);
-								if(dropable != lastDropable)
-								{
-									if(lastDropable != null)
-									{
-										lastDropable.stopHighlight();
-									}
-									lastDropable = dropable;
-								}
-								if(dropable != null)
-								{
-									Point childPoint = SwingUtilities.convertPoint(content, newPos, (Component) dropable);
-									dropable.updateHighlight(childPoint);
-								}
-							}
-							pos = newPos;
-							overlay.setLocation(event.getXOnScreen() - offset.x, event.getYOnScreen() - offset.y);
-						}
-					}
-					event.consume();
+					ticket = null;
+					pos = null;
+					
+					overlay.setVisible(false);
+					overlay.getContentPane().removeAll();
 				}
+				else if(event.getID() == MouseEvent.MOUSE_DRAGGED)
+				{
+					Point newPos = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), content);
+					if(!newPos.equals(pos))
+					{
+						{
+							//Find the target position!
+							Dropable dropable = getDropableAt(newPos);
+							if(dropable != lastDropable)
+							{
+								if(lastDropable != null)
+								{
+									lastDropable.stopHighlight();
+								}
+								lastDropable = dropable;
+							}
+							if(dropable != null)
+							{
+								Point childPoint = SwingUtilities.convertPoint(content, newPos, (Component) dropable);
+								dropable.updateHighlight(childPoint);
+							}
+						}
+						pos = newPos;
+						overlay.setLocation(event.getXOnScreen() - offset.x, event.getYOnScreen() - offset.y);
+					}
+				}
+				event.consume();
 			}
 		}, eventMask);
 	}

@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.URI;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -40,7 +39,7 @@ public class TicketBox extends JPanel implements Refreshable
 	private final CTextArea title;
 	private final CTextArea shortComment;
 	
-	public TicketBox(final JFrame parentWindow, WrappedTicket ticket)
+	public TicketBox(WrappedTicket ticket)
 	{
 		this.ticket = ticket;
 		
@@ -155,7 +154,7 @@ public class TicketBox extends JPanel implements Refreshable
 				}
 				else
 				{
-					new TicketViewer(parentWindow, ticket, TicketBox.this);
+					new TicketViewer(ticket, TicketBox.this);
 				}
 			}
 		};

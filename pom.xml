@@ -5,7 +5,7 @@
 
 	<groupId>de.ecconia.logicworld.issuemanager</groupId>
 	<artifactId>IssueManager</artifactId>
-	<version>1.0.0-WIP</version>
+	<version>1.0.1</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -24,6 +24,7 @@ import javax.swing.event.DocumentListener;
 import de.ecconia.logicworld.issuemanager.data.Type;
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedComment;
 import de.ecconia.logicworld.issuemanager.manager.data.WrappedTicket;
+import de.ecconia.logicworld.issuemanager.manager.window.ManagerGUI;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CDropDown;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CLabel;
 import de.ecconia.logicworld.issuemanager.manager.window.helper.CTextArea;
@@ -31,7 +32,7 @@ import de.ecconia.logicworld.issuemanager.manager.window.layout.RowsWidthFillLay
 
 public class TicketViewer
 {
-	public TicketViewer(JFrame parentWindow, WrappedTicket ticket, Refreshable refreshable)
+	public TicketViewer(WrappedTicket ticket, Refreshable refreshable)
 	{
 		JFrame window = new JFrame("Ticket: " + ticket.getOriginal().getNumber() + ": " + ticket.getOriginal().getTitle());
 		window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -164,8 +165,7 @@ public class TicketViewer
 		
 		//Make the window visible:
 		window.pack();
-		//TODO: Inject the location of the parent window in a better way.
-		window.setLocationRelativeTo(parentWindow);
+		window.setLocationRelativeTo(ManagerGUI.instance.getWindow());
 		window.setVisible(true);
 		
 		//Load the comments (async):

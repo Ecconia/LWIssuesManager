@@ -36,6 +36,7 @@ public class ManagerGUI
 	private final DragPane dragPane;
 	private final GroupBar groupBar;
 	private final JPanel mainContent;
+	private final JFrame window;
 	
 	private ColumnContainer currentGroup;
 	
@@ -56,15 +57,13 @@ public class ManagerGUI
 			e.printStackTrace(System.out);
 		}
 		
-		//Create window:
-		JFrame window = new JFrame("LogicWorld Ticket-Manager Version: " + IssueManager.version);
-		
 		for(WrappedTicket ticket : manager.getTickets())
 		{
-			ticket.setComponent(new TicketBox(window, ticket));
+			ticket.setComponent(new TicketBox(ticket));
 		}
 		
 		//Setup window:
+		window = new JFrame("LogicWorld Ticket-Manager Version: " + IssueManager.version);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setMinimumSize(new Dimension(250, 200));
 		window.setPreferredSize(new Dimension(800, 600));
@@ -97,27 +96,22 @@ public class ManagerGUI
 		scroller.setBorder(new EmptyBorder(0, 0, 0, 0));
 		//Dirty fix for horizontal scrolling:
 		{
-			Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener()
-			{
-				@Override
-				public void eventDispatched(AWTEvent e)
+			Toolkit.getDefaultToolkit().addAWTEventListener(e -> {
+				if(!window.isActive())
 				{
-					if(!window.isActive())
+					return;
+				}
+				if(e instanceof MouseWheelEvent event)
+				{
+					if((event.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) != 0)
 					{
-						return;
-					}
-					if(e instanceof MouseWheelEvent event)
-					{
-						if((event.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) != 0)
+						event.consume(); //Lets process this somewhere else.
+						Point transfer = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), scroller);
+						MouseWheelEvent eventCopy = new MouseWheelEvent(scroller, event.getID(), event.getWhen(), event.getModifiersEx(), transfer.x, transfer.y, event.getXOnScreen(), event.getYOnScreen(), event.getClickCount(), false, event.getScrollType(), event.getScrollAmount(), event.getWheelRotation());
+						//Dispatching does not work, instead directly forward it to the listeners. Probably the better solution anyway.
+						for(MouseWheelListener l : scroller.getMouseWheelListeners())
 						{
-							event.consume(); //Lets process this somewhere else.
-							Point transfer = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), scroller);
-							MouseWheelEvent eventCopy = new MouseWheelEvent(scroller, event.getID(), event.getWhen(), event.getModifiersEx(), transfer.x, transfer.y, event.getXOnScreen(), event.getYOnScreen(), event.getClickCount(), false, event.getScrollType(), event.getScrollAmount(), event.getWheelRotation());
-							//Dispatching does not work, instead directly forward it to the listeners. Probably the better solution anyway.
-							for(MouseWheelListener l : scroller.getMouseWheelListeners())
-							{
-								l.mouseWheelMoved(eventCopy);
-							}
+							l.mouseWheelMoved(eventCopy);
 						}
 					}
 				}
@@ -182,6 +176,11 @@ public class ManagerGUI
 	public Manager getManager()
 	{
 		return manager;
+	}
+	
+	public JFrame getWindow()
+	{
+		return window;
 	}
 	
 	private void initializeConfig() throws IOException
